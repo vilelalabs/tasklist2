@@ -10,13 +10,13 @@
         <p class="time">{{ time }}</p>
         <p class="action">
             <button @click="handlePlayClick" class="play">
-                <PlayButtonVue  v-bind:style="{ color: playColor }" />
+                <PlayButtonVue v-bind:style="{ color: playColor }" />
             </button>
-            <button class="pause">
-                <PauseButtonVue />
+            <button @click="handlePauseClick" class="pause">
+                <PauseButtonVue v-bind:style="{ color: pauseColor }" />
             </button>
-            <button class="stop">
-                <StopButtonVue />
+            <button @click="handleStopClick" class="stop">
+                <StopButtonVue v-bind:style="{ color: stopColor }" />
             </button>
         </p>
     </div>
@@ -56,6 +56,8 @@ export default {
         return {
             checked: false,
             playColor: 'blue',
+            pauseColor: 'blue',
+            stopColor: 'blue',
         }
     },
     methods: {
@@ -64,6 +66,13 @@ export default {
         },
         handlePlayClick() {
             this.playColor = 'grey';
+            
+        },
+        handlePauseClick() {
+            this.pauseColor = 'grey';
+        },
+        handleStopClick() {
+            this.stopColor = 'grey';
         },
     }
 }
