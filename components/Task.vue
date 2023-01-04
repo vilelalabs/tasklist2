@@ -1,15 +1,23 @@
 <template>
     <div class="taskContainer">
-        <p class="sel">
-            <UncheckedBox />
-        </p>
-        <p class="id">id</p>
-        <p class="task">Tarefa</p>
-        <p class="time">00:00:00</p>
+        <button class="sel" @click="handleSelClick">
+            <CheckedBox v-if="checked" />
+            <UncheckedBox v-else />
+        </button>
+
+        <p class="id">{{ id }}</p>
+        <p class="task">{{ taskName }}</p>
+        <p class="time">{{ time }}</p>
         <p class="action">
-            <PlayButtonVue />
-            <PauseButtonVue />
-            <StopButtonVue />
+            <button @click="handlePlayClick" class="play">
+                <PlayButtonVue  v-bind:style="{ color: playColor }" />
+            </button>
+            <button class="pause">
+                <PauseButtonVue />
+            </button>
+            <button class="stop">
+                <StopButtonVue />
+            </button>
         </p>
     </div>
 </template>
@@ -23,12 +31,40 @@ import StopButtonVue from './Icons/StopButton.vue';
 
 export default {
     name: 'TasksTitle',
+    props: {
+        id: {
+            type: Number,
+            required: true,
+        },
+        taskName: {
+            type: String,
+            required: true,
+        },
+        time: {
+            type: String,
+            required: true,
+        },
+    },
     components: {
         UncheckedBox,
         CheckedBox,
         PlayButtonVue,
         PauseButtonVue,
         StopButtonVue,
+    },
+    data() {
+        return {
+            checked: false,
+            playColor: 'blue',
+        }
+    },
+    methods: {
+        handleSelClick() {
+            this.checked = !this.checked;
+        },
+        handlePlayClick() {
+            this.playColor = 'grey';
+        },
     }
 }
 </script>
@@ -40,13 +76,22 @@ export default {
     justify-content: center;
     align-items: center;
     border-radius: 0.5rem;
-    background-color: grey;
-    color: #ddd;
+    background-color: lightcyan;
+    color: #444;
     gap: 1rem;
     width: 100%;
     padding: 0.5rem;
     text-transform: uppercase;
     font-weight: bold;
+    margin-top: 0.2rem;
+
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }
 
 .sel {

@@ -1,9 +1,9 @@
 <template>
-    <button :style="{ backgroundColor: color }">
+    <div class="colorButton" :style="{ backgroundColor: color }">
         <slot>
             {{ text }}
         </slot>
-    </button>
+    </div>
 </template>
 
 <script>
@@ -22,17 +22,16 @@ export default {
 </script>
 
 <style>
- 
-button {
+.colorButton {
     color: #ddd;
     border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    padding: 8px 16px;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    padding: 0.8rem 1.6rem;
     transition: transform 0.2s ease-in-out;
 }
 
-button:hover {
+.colorButton:hover {
     color: white;
 }
 </style>

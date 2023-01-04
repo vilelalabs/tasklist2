@@ -2,14 +2,18 @@
   <div class="container">
     <Title />
     <div class="buttonContainer">
-      <Button color="blue" text="Adicionar Tarefa" />
-      <Button color="red" text="Remover Tarefa" />
+      <button @click="handleAddNewTask">
+        <Button color="blue" text="Adicionar Tarefa"></Button>
+      </button>
+      <button @click="handleDeleteTasks">
+        <Button color="red" text="Remover Tarefa"></Button>
+      </button>
     </div>
-    <TasksTitle />
+
+    <NewTask @closeAddNewTask="addNewTask = $event" @addTask="tasks.push($event)" v-if="addNewTask" task="new task" />
+    <TasksTitle v-if="thereIsTasks" />
     <TasksContainer>
-      <Task />
-      <Task />
-      <Task />
+      <Task v-for="task in tasks" :key="task.id" :id="task.id" :task="task" :time="task.time" :taskName="task.task" />
     </TasksContainer>
 
   </div>
@@ -27,7 +31,32 @@ export default {
     Button,
     TasksTitle,
     TasksContainer,
-  }
+  },
+  methods: {
+    handleAddNewTask() {
+      this.addNewTask = true
+
+    },
+    handleDeleteTasks() {
+      this.addNewTask = false
+    },
+  },
+  data() {
+    return {
+      addNewTask: false,
+      
+      tasks: [],
+    }
+  },
+  computed: {
+    thereIsTasks() {
+      if (this.tasks.length > 0) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
 }
 </script>
 
@@ -50,6 +79,12 @@ html {
 
 }
 
+button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .buttonContainer {
   display: flex;
   flex-direction: row;
@@ -58,7 +93,7 @@ html {
   gap: 1.5rem;
 }
 
-p{
+p {
   margin: 0;
   padding: 0;
 }

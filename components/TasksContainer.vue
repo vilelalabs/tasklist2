@@ -5,6 +5,9 @@
 </template>
 
 <script>
+export default {
+    name: 'TasksContainer',
+}
 </script>
 
 <style scoped>
