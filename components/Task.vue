@@ -7,15 +7,15 @@
 
         <p class="id">{{ id }}</p>
         <p class="task">{{ taskName }}</p>
-        <p class="time">{{ time }}</p>
+        <TimeCounter :state="state" />
         <p class="action">
-            <button @click="handlePlayClick" class="play">
+            <button v-if="!playing && !stopped" @click="handlePlayClick" class="play">
                 <PlayButtonVue v-bind:style="{ color: playColor }" />
             </button>
-            <button @click="handlePauseClick" class="pause">
+            <button v-if="playing && !stopped" @click="handlePauseClick" class="pause">
                 <PauseButtonVue v-bind:style="{ color: pauseColor }" />
             </button>
-            <button @click="handleStopClick" class="stop">
+            <button v-if="playing || paused || stopped" @click="handleStopClick" class="stop">
                 <StopButtonVue v-bind:style="{ color: stopColor }" />
             </button>
         </p>
@@ -30,17 +30,13 @@ import PauseButtonVue from './Icons/PauseButton.vue';
 import StopButtonVue from './Icons/StopButton.vue';
 
 export default {
-    name: 'TasksTitle',
+    name: 'Task',
     props: {
         id: {
-            type: Number,
-            required: true,
-        },
-        taskName: {
             type: String,
             required: true,
         },
-        time: {
+        taskName: {
             type: String,
             required: true,
         },
@@ -55,9 +51,14 @@ export default {
     data() {
         return {
             checked: false,
+            playing: false,
+            paused: false,
+            stopped: false,
+            state: 'unitialized',
             playColor: 'blue',
             pauseColor: 'blue',
-            stopColor: 'blue',
+            stopColor: 'red',
+
         }
     },
     methods: {
@@ -65,15 +66,38 @@ export default {
             this.checked = !this.checked;
         },
         handlePlayClick() {
-            this.playColor = 'grey';
-            
+            this.playing = true;
+            this.paused = false;
+            this.stopped = false;
+            this.pauseColor = 'green';
+            this.state = 'playing';
+
+            console.log("Start Time - " + this.startTime);
         },
         handlePauseClick() {
             this.pauseColor = 'grey';
+            this.playing = false;
+            this.paused = true;
+            this.stopped = false;
+            this.state = 'paused';
         },
         handleStopClick() {
             this.stopColor = 'grey';
+            this.playing = false;
+            this.paused = false;
+            this.stopped = true;
+            this.state = 'stopped';
+
+            console.log("Finish Time - " + this.finishTime);
         },
+    },
+    computed: {
+        startTime: function () {
+            return new Date().toISOString();
+        },
+        finishTime: function () {
+            return new Date().toISOString();
+        }
     }
 }
 </script>
