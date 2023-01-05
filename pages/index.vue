@@ -13,9 +13,9 @@
     <NewTask @closeAddNewTask="addNewTask = $event" @addTask="tasks.push($event)" v-if="addNewTask" task="new task" />
     <TasksTitle v-if="thereIsTasks" />
     <TasksContainer>
-      <Task v-for="task in tasks" :key="task.id" :id="task.id" :task="task" :time="task.time" :taskName="task.task" />
+      <Task v-for="task in tasks" :key="task.id" :id="task.id" :task="task"
+        :time="task.time" :taskName="task.task" />
     </TasksContainer>
-
   </div>
 </template>
 
@@ -44,7 +44,6 @@ export default {
   data() {
     return {
       addNewTask: false,
-      
       tasks: [],
     }
   },
@@ -55,7 +54,7 @@ export default {
       } else {
         return false
       }
-    }
+    },
   },
 }
 </script>
