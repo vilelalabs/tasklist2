@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+    postgres:
+      image: postgres:latest
+      restart: always
+      environment:
+        POSTGRES_PASSWORD: password
+        POSTGRES_USER: user
+        POSTGRES_DB: database
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      ports:
+        - "5432:5432"
+    
+    pgadmin:
+      image: dpage/pgadmin4:latest
+      restart: always
+      environment:
+        PGADMIN_DEFAULT_EMAIL: henrique@vilela.com
+        PGADMIN_DEFAULT_PASSWORD: password
+      volumes:
+        - pgadmin_data:/var/lib/pgadmin
+      ports:
+        - "5050:80"
+      depends_on:
+        - postgres
+volumes:
+    postgres_data:
+    pgadmin_data:
