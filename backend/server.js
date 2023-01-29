@@ -2,13 +2,20 @@ const express = require('express');
 const { Client } = require('pg');
 require('dotenv').config();
 
+const swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
+
 const app = express();
 app.use(express.json());
-
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+);
 
 
 const client = new Client({
-    host: '127.0.0.1',
+    host: '192.168.15.79',
     port: 5432,
     user: 'user',
     password: 'password',
@@ -22,8 +29,9 @@ app.get('/data', (req, res) => {
     client.query('SELECT * FROM tasks', (err, result) => {
         if (err) {
             console.log(err);
+            res.status(500).send('Error reading DB');
         }
-        res.send(result.rows);
+        res.status(200).send(result.rows);
     });
 });
 
@@ -66,6 +74,31 @@ app.put('/data', (req, res) => {
         res.status(200).send('Task updated');
     });
 });
+
+app.delete('/data', (req, res) => {
+    const { id } = req.query;
+
+    if (!id) {
+        res.status(400).send('Invalid id');
+        return;
+    }
+
+    client.query(`DELETE FROM tasks WHERE id = $1`, [id], (err, result) => {
+        if (err) {
+            res.status(500).send('Error finding task');
+            return;
+        }
+
+        if (result.rowCount === 0) {
+            res.status(404).send('Task not found');
+            return;
+        }
+
+        res.status(200).send('Task deleted');
+    });
+
+});
+
 
 
 app.listen(3001, () => {
