@@ -1,0 +1,103 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Task Manager API",
+        "description": "API para gerenciamento de tarefas"
+    },
+    "host": "localhost:3001",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Geral",
+            "description": "API de uso geral"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/data": {
+            "get": {
+                "tags": [
+                    "Tarefas"
+                ],
+                "summary": "Get all tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Tarefas"
+                        }
+                    },
+                    "500": {
+                        "description": "Error: can't reach Database"
+                    }
+                }
+            },
+            "post":{
+
+            },
+            "put":{
+
+            },
+            "delete":{
+
+            }
+        }
+    },
+    "definitions": {
+        "Tarefa": {
+            "required": [],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "uniqueItems": true,
+                    "description": "ID única da tarefa"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Nome da tarefa"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "unitialized",
+                        "playing",
+                        "paused",
+                        "stopped"
+                    ],
+                    "description": "Status atualizado da tarefa: não iniciada, em andamento, pausada ou finalizada"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "default": "2018-01-01T00:00:00.000Z",
+                    "description": "Data de criação do registro",
+                    "example": "2018-01-01T00:00:00.000Z"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "default": "2018-01-01T00:00:00.000Z",
+                    "description": "Última alteração do status da tarefa",
+                    "example": "2018-01-01T00:00:00.000Z"
+                },
+                "finished_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "default": "2018-01-01T00:00:00.000Z",
+                    "description": "Quando a tarefa foi finalizada",
+                    "example": "2018-01-01T00:00:00.000Z"
+                }
+            }
+        },
+        "Tarefas": {
+            "type": "array",
+            "$ref": "#/definitions/Tarefa"
+        }
+    }
+}
