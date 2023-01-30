@@ -11,6 +11,7 @@
   "author": "Henrique Vilela",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.2.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -18,7 +19,6 @@
     "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
-    "axios": "^1.2.3",
     "nodemon": "^2.0.20"
   }
 }
