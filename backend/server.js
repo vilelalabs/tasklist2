@@ -13,6 +13,13 @@ app.use(
     swaggerUi.setup(swaggerDocument)
 );
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
 
 const client = new Client({
     host: '192.168.15.79',
@@ -26,7 +33,6 @@ const client = new Client({
 client.connect();
 
 app.get('/data', (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*');
     client.query('SELECT * FROM tasks', (err, result) => {
         if (err) {
             console.log(err);
