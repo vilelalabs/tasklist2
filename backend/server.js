@@ -26,6 +26,7 @@ const client = new Client({
 client.connect();
 
 app.get('/data', (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
     client.query('SELECT * FROM tasks', (err, result) => {
         if (err) {
             console.log(err);
