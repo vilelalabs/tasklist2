@@ -54,13 +54,16 @@ export default {
       this.newTask = newTask
     },
     handleAddNewTask() {
-
       this.addNewTask = false;
-      this.task = {}
-      this.task.id = (Math.random(1, 99) * 100).toFixed(0)
-      this.task.time = "00:00:00"
-      this.task.task = this.newTask
-      this.tasks.push(this.task)
+      axios.post('http://localhost:3001/data', {name: this.newTask})
+        .then(response => {
+          console.log(response.data)
+          location.reload()
+
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
       console.log(this.task);
 
