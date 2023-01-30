@@ -8,7 +8,6 @@ const axios = require('axios');
 //         console.log(err);
 //     });
 
-
 // axios.post('http://localhost:3001/data', { name: 'Fazer curso de HTML' })
 //     .then((res) => {
 //         console.log(res.data);
@@ -20,22 +19,22 @@ const axios = require('axios');
 
 
 // Variables will come from the user interface
-let updatedAtDate = new Date();
-updatedAtDate = updatedAtDate.toISOString();
-//updatedStatus = 'playing';
- updatedStatus = 'paused';
+// let updatedAtDate = new Date();
+// updatedAtDate = updatedAtDate.toISOString();
+// //updatedStatus = 'playing';
+//  updatedStatus = 'stopped';
 
-axios.put('http://localhost:3001/data', {
-    id: 10,
-    status: updatedStatus,
-    updated_at: updatedAtDate
-})
-    .then((res) => {
-        console.log(res.data);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+// axios.put('http://localhost:3001/data', {
+//     id: 14,
+//     status: updatedStatus,
+//     updated_at: updatedAtDate
+// })
+//     .then((res) => {
+//         console.log(res.data);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 
 
 // axios.delete('http://localhost:3001/data', {

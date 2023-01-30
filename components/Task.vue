@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import UncheckedBox from '@/components/Icons/UncheckedBox.vue'
 import CheckedBox from '@/components/Icons/CheckedBox.vue'
 import PlayButtonVue from './Icons/PlayButton.vue';
@@ -40,7 +41,7 @@ export default {
             type: String,
             required: true,
         },
-        status:{
+        status: {
             type: String,
             required: true
         },
@@ -68,32 +69,60 @@ export default {
     methods: {
         handleSelClick() {
             this.checked = !this.checked;
+            this.$emit('checked', true);
         },
         handlePlayClick() {
+            this.setPlayState();
+            console.log("Start Time - " + this.startTime);
+            this.updateStatus(this.state);
+        },
+        handlePauseClick() {
+            this.setPauseState();
+            this.updateStatus(this.state);
+        },
+        handleStopClick() {
+            this.setStopState();
+            this.updateStatus(this.state);
+
+            console.log("Finish Time - " + this.finishTime);
+        },
+        setPlayState() {
             this.playing = true;
             this.paused = false;
             this.stopped = false;
             this.pauseColor = 'green';
             this.state = 'playing';
-
-            console.log("Start Time - " + this.startTime);
         },
-        handlePauseClick() {
+        setPauseState() {
             this.pauseColor = 'grey';
             this.playing = false;
             this.paused = true;
             this.stopped = false;
             this.state = 'paused';
         },
-        handleStopClick() {
+        setStopState() {
             this.stopColor = 'grey';
             this.playing = false;
             this.paused = false;
             this.stopped = true;
             this.state = 'stopped';
-
-            console.log("Finish Time - " + this.finishTime);
         },
+
+        updateStatus(status) {
+            let updatedAtDate = new Date();
+            updatedAtDate = updatedAtDate.toISOString();
+            axios.put('http://localhost:3001/data', {
+                id: this.id,
+                status: status,
+                updated_at: updatedAtDate
+            })
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     },
     computed: {
         startTime: function () {
@@ -103,16 +132,16 @@ export default {
             return new Date().toISOString();
         },
     },
-    mounted(){
+    mounted() {
         switch (this.status) {
             case 'playing':
-                this.handlePlayClick();
+                this.setPlayState();
                 break;
             case 'paused':
-                this.handlePauseClick();
+                this.setPauseState();
                 break;
             case 'stopped':
-                this.handleStopClick();
+                this.setStopState();
                 break;
             default:
                 break;

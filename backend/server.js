@@ -38,6 +38,10 @@ app.get('/data', (req, res) => {
             console.log(err);
             res.status(500).send('Error reading DB');
         }
+        if(result.rows.length === 0){
+            res.status(404).send('No tasks found');
+            return
+        }
         res.status(200).send(result.rows);
     });
 });
@@ -71,7 +75,6 @@ app.put('/data', (req, res) => {
     });
 
     const finished_at = (status === 'stopped') ? updated_at : null
-    console.log(finished_at);
 
     client.query(`UPDATE tasks SET status = $1, updated_at = $2, finished_at = $3 WHERE id = $4`, [status, updated_at, finished_at, id], (err, result) => {
         if (err) {

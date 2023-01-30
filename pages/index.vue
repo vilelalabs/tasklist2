@@ -19,7 +19,8 @@
 
     <TasksTitle v-if="thereIsTasks" />
     <TasksContainer>
-      <Task v-for="task in tasks" :key="task.id" :id="task.id" :name="task.name" :status="task.status" />
+      <Task v-for="task in updatedTasks" :key="task.id" :id="task.id" :name="task.name" :status="task.status"
+        @checked="handleChecked(task.id)" />
     </TasksContainer>
   </div>
 </template>
@@ -34,10 +35,12 @@ import TasksContainer from '@/components/TasksContainer.vue'
 import TasksTitle from '@/components/TasksTitle.vue'
 export default {
   name: 'IndexPage',
-  data: {
-    tasks: [],
-    task: {},
-    newTask: ''
+  data() {
+    return {
+      addNewTask: false,
+      tasks: [],
+      checkedTasks: [],
+    }
   },
   components: {
     Title,
@@ -53,44 +56,50 @@ export default {
     fillNewTask(newTask) {
       this.newTask = newTask
     },
-    handleAddNewTask() {
-      this.addNewTask = false;
-      axios.post('http://localhost:3001/data', {name: this.newTask})
+    showAllTasks() {
+      axios.get('http://localhost:3001/data')
         .then(response => {
-          console.log(response.data)
-          location.reload()
-
+          this.tasks = response.data
         })
         .catch(error => {
           console.log(error)
         })
-
-      console.log(this.task);
-
-
+    },
+    handleAddNewTask() {
+      this.addNewTask = false;
+      axios.post('http://localhost:3001/data', { name: this.newTask })
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     handleDeleteTasks() {
-      this.addNewTask = false
+      this.checkedTasks.forEach(task => {
+        axios.delete(`http://localhost:3001/data`, { params: { id: task } })
+          .then(response => {
+            console.log(response.data)
+            this.checkedTasks = [];
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
     },
+    handleChecked(id) {
+      if (this.checkedTasks.includes(id)) {
+        this.checkedTasks.splice(this.checkedTasks.indexOf(id), 1)
+        return
+      }
+      this.checkedTasks.push(id)
+    }
   },
   mounted() {
     this.addNewTask = false
+    this.showAllTasks();
+  },
 
-    axios.get('http://localhost:3001/data')
-      .then(response => {
-        this.tasks = response.data
-        console.log(this.tasks)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  },
-  data() {
-    return {
-      addNewTask: false,
-      tasks: [],
-    }
-  },
   computed: {
     thereIsTasks() {
       if (this.tasks.length > 0) {
@@ -99,6 +108,12 @@ export default {
         return false
       }
     },
+    updatedTasks() {
+      this.showAllTasks()
+      return this.tasks
+    },
+
+
   },
 }
 </script>
