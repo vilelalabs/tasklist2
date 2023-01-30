@@ -2,30 +2,43 @@
   <div class="container">
     <Title />
     <div class="buttonContainer">
-      <button @click="handleAddNewTask">
-        <Button color="blue" text="Adicionar Tarefa"></Button>
+      <button @click="handleNewTask">
+        <Button color="blue" text="Nova Tarefa"></Button>
       </button>
       <button @click="handleDeleteTasks">
         <Button color="red" text="Remover Tarefa"></Button>
       </button>
     </div>
 
-    <NewTask @closeAddNewTask="addNewTask = $event" @addTask="tasks.push($event)" v-if="addNewTask" task="new task" />
+    <div class="container-newtask">
+      <NewTask v-if="addNewTask" @newTask="fillNewTask" />
+      <button @click="handleAddNewTask" v-if="addNewTask">
+        <Button color="purple" text="Adicionar"></Button>
+      </button>
+    </div>
+
     <TasksTitle v-if="thereIsTasks" />
     <TasksContainer>
-      <Task v-for="task in tasks" :key="task.id" :id="task.id" :task="task"
-        :time="task.time" :taskName="task.task" />
+      <Task v-for="task in tasks" :key="task.id" :id="task.id" :name="task.name" :status="task.status" />
     </TasksContainer>
   </div>
 </template>
 
 <script>
+
+import axios from 'axios'
+
 import Title from '@/components/Title.vue'
 import Button from '@/components/Button.vue'
 import TasksContainer from '@/components/TasksContainer.vue'
 import TasksTitle from '@/components/TasksTitle.vue'
 export default {
   name: 'IndexPage',
+  data: {
+    tasks: [],
+    task: {},
+    newTask: ''
+  },
   components: {
     Title,
     Button,
@@ -33,13 +46,41 @@ export default {
     TasksContainer,
   },
   methods: {
+    handleNewTask() {
+      this.addNewTask = true;
+
+    },
+    fillNewTask(newTask) {
+      this.newTask = newTask
+    },
     handleAddNewTask() {
-      this.addNewTask = true
+
+      this.addNewTask = false;
+      this.task = {}
+      this.task.id = (Math.random(1, 99) * 100).toFixed(0)
+      this.task.time = "00:00:00"
+      this.task.task = this.newTask
+      this.tasks.push(this.task)
+
+      console.log(this.task);
+
 
     },
     handleDeleteTasks() {
       this.addNewTask = false
     },
+  },
+  mounted() {
+    this.addNewTask = false
+
+    axios.get('http://localhost:3001/data')
+      .then(response => {
+        this.tasks = response.data
+        console.log(this.tasks)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   },
   data() {
     return {
@@ -76,6 +117,16 @@ html {
   border-radius: 0.5rem;
   margin: 1rem;
 
+}
+
+.container-newtask {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  width: 100%;
 }
 
 button {

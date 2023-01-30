@@ -1,7 +1,6 @@
 <template>
     <div class="taskContainer">
-        <input type="text" v-on:keydown.enter="checkEnterKey" v-model="newTask" class="task" />
-
+        <input type="text" v-model="newTask" class="task" placeholder="Add a new task" @input="emitText">
     </div>
 </template>
 
@@ -14,18 +13,11 @@ export default {
             newTask: ''
         }
     },
-    methods: {
-        checkEnterKey() {
-            if (this.task !== '') {
-                this.$emit('closeAddNewTask', false)
-                this.task.id = (Math.random(1, 99) * 100).toFixed(0)
-                this.task.time = "00:00:00"
-                this.task.task = this.newTask
-                this.$emit('addTask', this.task)
-                this.task = ''
-            }
+    methods:{
+        emitText(){
+            this.$emit('newTask', this.newTask)
         }
-    },
+    }
 }
 </script>
 

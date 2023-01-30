@@ -6,7 +6,7 @@
         </button>
 
         <p class="id">{{ id }}</p>
-        <p class="task">{{ taskName }}</p>
+        <p class="task">{{ name }}</p>
         <TimeCounter :state="state" />
         <p class="action">
             <button v-if="!playing && !stopped" @click="handlePlayClick" class="play">
@@ -33,12 +33,16 @@ export default {
     name: 'Task',
     props: {
         id: {
+            type: Number,
+            required: true,
+        },
+        name: {
             type: String,
             required: true,
         },
-        taskName: {
+        status:{
             type: String,
-            required: true,
+            required: true
         },
     },
     components: {
@@ -97,6 +101,21 @@ export default {
         },
         finishTime: function () {
             return new Date().toISOString();
+        },
+    },
+    mounted(){
+        switch (this.status) {
+            case 'playing':
+                this.handlePlayClick();
+                break;
+            case 'paused':
+                this.handlePauseClick();
+                break;
+            case 'stopped':
+                this.handleStopClick();
+                break;
+            default:
+                break;
         }
     }
 }
