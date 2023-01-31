@@ -33,7 +33,7 @@ const client = new Client({
 client.connect();
 
 app.get('/data', (req, res) => {
-    client.query('SELECT * FROM tasks', (err, result) => {
+    client.query('SELECT * FROM tasks ORDER BY id ASC', (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send('Error reading DB');
