@@ -6,5 +6,6 @@ CREATE TABLE tasks (
   status VARCHAR(15) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  finished_at TIMESTAMP
+  finished_at TIMESTAMP,
+  timer INTEGER NOT NULL DEFAULT 0
 );
