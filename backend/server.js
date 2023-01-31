@@ -38,9 +38,9 @@ app.get('/data', (req, res) => {
             console.log(err);
             res.status(500).send('Error reading DB');
         }
-        if(result.rows.length === 0){
-            res.status(404).send('No tasks found');
-            return
+        if (result.rows.length === 0) {
+            res.status(204).send('No tasks found');
+            return  
         }
         res.status(200).send(result.rows);
     });
@@ -84,6 +84,30 @@ app.put('/data', (req, res) => {
         res.status(200).send('Task updated');
     });
 });
+
+app.put('/data/updatetimer', (req, res) => {
+    const { id, timer } = req.body;
+
+    // find id in database
+    client.query(`SELECT * FROM tasks WHERE id = $1`, [id], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error finding task');
+        }
+        if (result.rows.length === 0) {
+            res.status(404).send('Task not found');
+        }
+    });
+
+    client.query(`UPDATE tasks SET timer = $1 WHERE id = $2`, [timer, id], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error updating task');
+        }
+        res.status(200).send('Timer Task updated');
+    });
+});
+
 
 app.delete('/data', (req, res) => {
     const { id } = req.query;

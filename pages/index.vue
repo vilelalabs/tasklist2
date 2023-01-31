@@ -20,7 +20,7 @@
     <TasksTitle v-if="thereIsTasks" />
     <TasksContainer>
       <Task v-for="task in updatedTasks" :key="task.id" :id="task.id" :name="task.name" :status="task.status"
-        @checked="handleChecked(task.id)" />
+        :created_at="task.created_at" :timer="task.timer" @checked="handleChecked(task.id)" />
     </TasksContainer>
   </div>
 </template>
@@ -62,7 +62,7 @@ export default {
           this.tasks = response.data
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
         })
     },
     handleAddNewTask() {
@@ -74,6 +74,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
+      location.reload()
     },
     handleDeleteTasks() {
       this.checkedTasks.forEach(task => {
@@ -81,10 +82,12 @@ export default {
           .then(response => {
             console.log(response.data)
             this.checkedTasks = [];
+
           })
           .catch(error => {
-            console.log(error)
+            console.log(error.response.data)
           })
+        location.reload()
       })
     },
     handleChecked(id) {
@@ -111,9 +114,7 @@ export default {
     updatedTasks() {
       this.showAllTasks()
       return this.tasks
-    },
-
-
+    }
   },
 }
 </script>

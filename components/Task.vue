@@ -7,7 +7,9 @@
 
         <p class="id">{{ id }}</p>
         <p class="task">{{ name }}</p>
-        <TimeCounter :state="state" />
+
+        <TimeCounter @timer-output="currentTime" :state="state" :timerInSeconds="savedTime()" />
+
         <p class="action">
             <button v-if="!playing && !stopped" @click="handlePlayClick" class="play">
                 <PlayButtonVue v-bind:style="{ color: playColor }" />
@@ -45,6 +47,10 @@ export default {
             type: String,
             required: true
         },
+        timer: {
+            type: Number,
+            required: true
+        }
     },
     components: {
         UncheckedBox,
@@ -73,7 +79,6 @@ export default {
         },
         handlePlayClick() {
             this.setPlayState();
-            console.log("Start Time - " + this.startTime);
             this.updateStatus(this.state);
         },
         handlePauseClick() {
@@ -83,8 +88,6 @@ export default {
         handleStopClick() {
             this.setStopState();
             this.updateStatus(this.state);
-
-            console.log("Finish Time - " + this.finishTime);
         },
         setPlayState() {
             this.playing = true;
@@ -99,6 +102,7 @@ export default {
             this.paused = true;
             this.stopped = false;
             this.state = 'paused';
+
         },
         setStopState() {
             this.stopColor = 'grey';
@@ -107,7 +111,6 @@ export default {
             this.stopped = true;
             this.state = 'stopped';
         },
-
         updateStatus(status) {
             let updatedAtDate = new Date();
             updatedAtDate = updatedAtDate.toISOString();
@@ -122,6 +125,21 @@ export default {
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        currentTime(time) {
+            axios.put('http://localhost:3001/data/updatetimer', {
+                id: this.id,
+                timer: time
+            })
+                .then((res) => {
+                    //  console.log(res.data); // ALL OK
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        savedTime() {
+            return this.timer; //get from props
         }
     },
     computed: {
@@ -133,6 +151,7 @@ export default {
         },
     },
     mounted() {
+        this.savedTime();
         switch (this.status) {
             case 'playing':
                 this.setPlayState();
@@ -146,7 +165,8 @@ export default {
             default:
                 break;
         }
-    }
+    },
+
 }
 </script>
 
