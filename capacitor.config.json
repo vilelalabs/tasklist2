@@ -1,0 +1,6 @@
+{
+  "appId": "br.hvilela.app",
+  "appName": "tasklist",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

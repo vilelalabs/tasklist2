@@ -37,6 +37,10 @@ export default {
     '@nuxtjs/axios',
   ],
 
+  env:{
+    HOST_URL: process.env.HOST_URL || 'localhost:3001'
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
@@ -44,7 +48,13 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-   
-  }
+  server: {
+    host: "0.0.0.0",
+    port: 80
+  },
+
+  build:{
+    publicPath: '/nuxt/',
+  },
+
 }

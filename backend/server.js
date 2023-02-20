@@ -1,11 +1,13 @@
 const express = require('express');
 const { Client } = require('pg');
 require('dotenv').config();
+const cors = require('cors');
 
 const swaggerUi = require('swagger-ui-express'),
     swaggerDocument = require('./swagger.json');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(
     '/api-docs',
@@ -33,21 +35,28 @@ const client = new Client({
 client.connect();
 
 app.get('/data', (req, res) => {
-    client.query(`SELECT * FROM tasks
-                    ORDER BY
-                    CASE WHEN status != 'stopped' THEN 1 ELSE 2 END,
-                    id ASC;`,
-        (err, result) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send('Erro interno do servidor');
-            }
-            if (result.rows.length === 0) {
-                res.status(204).send('Nenhuma tarefa encontrada.');
-                return
-            }
-            res.status(200).send(result.rows);
-        });
+    try {
+        client.query(`SELECT * FROM tasks
+        ORDER BY
+        CASE WHEN status != 'stopped' THEN 1 ELSE 2 END,
+        id ASC;`,
+            (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send('Erro interno do servidor');
+                }
+                if (result.rows.length === 0) {
+                    res.status(204).send('Nenhuma tarefa encontrada.');
+                    return
+                }
+                res.status(200).send(result.rows);
+            });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Erro interno do servidor');
+    }
+
 });
 
 app.post('/data', (req, res) => {

@@ -57,7 +57,7 @@ export default {
       this.newTask = newTask
     },
     showAllTasks() {
-      axios.get('http://localhost:3001/data')
+      axios.get(`http://${process.env.HOST_URL}/data`)
         .then(response => {
           this.tasks = response.data
         })
@@ -67,7 +67,7 @@ export default {
     },
     handleAddNewTask() {
       this.addNewTask = false;
-      axios.post('http://localhost:3001/data', { name: this.newTask })
+      axios.post(`http://${process.env.HOST_URL}/data`, { name: this.newTask })
         .then(response => {
           console.log(response.data)
         })
@@ -78,7 +78,7 @@ export default {
     },
     handleDeleteTasks() {
       this.checkedTasks.forEach(task => {
-        axios.delete(`http://localhost:3001/data`, { params: { id: task } })
+        axios.delete(`http://${process.env.HOST_URL}/data`, { params: { id: task } })
           .then(response => {
             console.log(response.data)
             this.checkedTasks = [];

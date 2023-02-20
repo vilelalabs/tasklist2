@@ -26,10 +26,11 @@ export default {
     color: #ddd;
     padding: 0.5rem;
     width: 100%;
-    gap: 1rem;
+    gap: 1.2rem;
 
     text-transform: uppercase;
     font-weight: bold;
+
 }
 .sel {
     width: 5%;
@@ -42,7 +43,6 @@ export default {
 }
 .task {
     width: 60%;
-    
 }
 .time {
     width: 15%;
@@ -52,4 +52,11 @@ export default {
     width: 15%;
     text-align: center;
 }
+
+@media screen and (max-width: 480px) {
+    .container{
+        font-size: smaller;
+    }
+}
+  
 </style>

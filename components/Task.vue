@@ -114,7 +114,7 @@ export default {
         updateStatus(status) {
             let updatedAtDate = new Date();
             updatedAtDate = updatedAtDate.toISOString();
-            axios.put('http://localhost:3001/data', {
+            axios.put(`http://${process.env.HOST_URL}/data`, {
                 id: this.id,
                 status: status,
                 updated_at: updatedAtDate
@@ -127,7 +127,7 @@ export default {
                 });
         },
         currentTime(time) {
-            axios.put('http://localhost:3001/data/updatetimer', {
+            axios.put(`http://${process.env.HOST_URL}/data/updatetimer`, {
                 id: this.id,
                 timer: time
             })
@@ -179,7 +179,7 @@ export default {
     border-radius: 0.5rem;
     background-color: lightcyan;
     color: #444;
-    gap: 1rem;
+    gap: 1.2rem;
     width: 100%;
     padding: 0.5rem;
     text-transform: uppercase;
@@ -219,4 +219,12 @@ button {
     width: 15%;
     text-align: center;
 }
+
+
+@media screen and (max-width: 480px) {
+    .task {
+        font-size: smaller;
+    }
+}
+
 </style>
